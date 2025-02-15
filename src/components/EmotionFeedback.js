@@ -1,48 +1,95 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
+import "./EmotionFeedback.css";
 
 const EmotionFeedback = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [emotion, setEmotion] = useState(null);
   const [captured, setCaptured] = useState(false);
+  const [isWebcamActive, setIsWebcamActive] = useState(false);
+  const [countdown, setCountdown] = useState(null);
 
-  // Start Webcam
-  const startWebcam = () => {
-    navigator.mediaDevices.getUserMedia({ video: true })
+  useEffect(() => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
       .then((stream) => {
-        videoRef.current.srcObject = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          setIsWebcamActive(true);
+        }
       })
       .catch((err) => console.error("Error accessing webcam:", err));
+  }, []);
+
+  const startCaptureCountdown = () => {
+    setCountdown(5);
+    let timeLeft = 5;
+
+    const interval = setInterval(() => {
+      timeLeft -= 1;
+      setCountdown(timeLeft);
+
+      if (timeLeft === 0) {
+        clearInterval(interval);
+        captureImage();
+      }
+    }, 1000);
   };
 
-  // Capture Image
   const captureImage = () => {
+    if (!videoRef.current) return;
     const canvas = canvasRef.current;
     const video = videoRef.current;
     const ctx = canvas.getContext("2d");
-    
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
     setCaptured(true);
+    setCountdown(null);
     sendToBackend(canvas);
   };
 
-  // Send Image to Backend for Emotion Detection
   const sendToBackend = async (canvas) => {
     canvas.toBlob(async (blob) => {
       const formData = new FormData();
       formData.append("image", blob, "captured.jpg");
 
       try {
-        const response = await axios.post("http://127.0.0.1:5000/detect_emotion", formData);
+        const response = await axios.post(
+          "http://127.0.0.1:5000/detect_emotion",
+          formData
+        );
         setEmotion(response.data.emotion);
       } catch (error) {
         console.error("Error detecting emotion:", error);
+        setEmotion("Error detecting emotion");
       }
     }, "image/jpeg");
+  };
+
+  const stopWebcam = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      let stream = videoRef.current.srcObject;
+      let tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+      setIsWebcamActive(false);
+    }
+  };
+
+  // ⭐ Function to get star rating based on emotion
+  const getStarRating = (emotion) => {
+    const ratings = {
+      angry: 1,
+      disgust: 1,
+      fear: 2,
+      sad: 2,
+      neutral: 3,
+      surprise: 4,
+      happy: 5,
+    };
+    return ratings[emotion] || 0; // Default to 0 if emotion is not recognized
   };
 
   return (
@@ -51,13 +98,22 @@ const EmotionFeedback = () => {
       <video ref={videoRef} autoPlay></video>
       <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
 
-      {!captured ? (
-        <button onClick={captureImage}>Capture</button>
+      {countdown !== null ? (
+        <h3 className="countdown">{countdown}</h3>
+      ) : !captured ? (
+        <button onClick={startCaptureCountdown}>Capture</button>
       ) : (
-        <h3>Detected Emotion: {emotion ? emotion : "Detecting..."}</h3>
+        <>
+          <h3>Detected Emotion: {emotion ? emotion : "Detecting..."}</h3>
+          <div className="stars">
+            {Array.from({ length: getStarRating(emotion) }, (_, i) => (
+              <span key={i} className="star">⭐</span>
+            ))}
+          </div>
+        </>
       )}
 
-      <button onClick={startWebcam}>Start Webcam</button>
+      {isWebcamActive && <button onClick={stopWebcam}>Stop Webcam</button>}
     </div>
   );
 };

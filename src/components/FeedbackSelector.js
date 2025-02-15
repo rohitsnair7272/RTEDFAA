@@ -19,10 +19,10 @@ const FeedbackInterface = () => {
         <button className="feedback-button" onClick={() => navigate("/emotion")}>
           Emotion Feedback
           </button>
-        <button className="feedback-button" onClick={() => handleFeedbackSelection('text')}>
+        <button className="feedback-button" onClick={() => navigate("/text")}>
           Text Feedback
           </button>
-        <button className="feedback-button" onClick={() => handleFeedbackSelection('voice')}>
+        <button className="feedback-button" onClick={() => navigate("/voice")}>
           Voice Feedback
           </button>
       </div>
