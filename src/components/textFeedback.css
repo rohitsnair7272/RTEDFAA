@@ -1,56 +1,72 @@
+/* General Styling */
 .feedback-page {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    
-    font-family: Arial, sans-serif;
+    font-family: "Poppins", sans-serif;
+    color: #fff;
   }
   
+  /* Heading */
   .feedback-heading {
     position: relative;
     font-size: 50px;
-    font-weight: bold;
-    margin-bottom: 500px;
-    color: white;
+    font-weight: 700;
+    margin-bottom: 300px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   }
   
+  /* Feedback Input Container */
   .text-container {
-    width: 100%;
-    max-width: 500px;
+    width: 1200px;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   }
   
+  /* Textarea */
   .feedback-input {
     width: 100%;
     height: 150px;
-    padding: 50px;
+    padding: 12px;
     font-size: 16px;
-    border: 2px solid #ccc;
+    color: #333;
+    border: none;
     border-radius: 8px;
     resize: none;
     outline: none;
-    top: 5%;
+    background: rgba(255, 255, 255, 0.8);
+    transition: 0.3s ease-in-out;
   }
   
   .feedback-input:focus {
-    border-color: #007bff;
+    background: #fff;
+    border: 2px solid #ff7e5f;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   }
   
+  /* Submit Button */
   .submit-btn {
-    margin-top: 15px;
-    padding: 10px 20px;
+    margin-top: 20px;
+    padding: 12px 25px;
     font-size: 16px;
     font-weight: bold;
     color: #fff;
-    background-color: #007bff;
+    background: linear-gradient(to right, #ff512f, #dd2476);
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   }
   
   .submit-btn:hover {
-    background-color: #0056b3;
+    background: linear-gradient(to right, #dd2476, #ff512f);
+    transform: scale(1.05);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
   }
   
