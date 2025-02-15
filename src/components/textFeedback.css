@@ -1,37 +1,34 @@
 /* General Styling */
 .feedback-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    font-family: "Poppins", sans-serif;
-    color: #fff;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Keeps it centered */
+  height: 100vh;
+  padding-top: 20px; /* Moves everything slightly higher */
+}
   
-  /* Heading */
-  .feedback-heading {
-    position: relative;
-    font-size: 50px;
-    font-weight: 700;
-    margin-bottom: 300px;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Feedback Input Container */
-  .text-container {
-    width: 1200px;
-    max-width: 1200px;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  }
+.text-container {
+  width: 1200px;
+  max-width: 90%; /* Makes it responsive */
+  background: rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  margin-top: -50px; /* Moves it slightly upwards */
+}
+
+/* Adjust heading margin */
+.feedback-heading {
+  font-size: 50px;
+  font-weight: 700;
+  margin-bottom: 100px; /* Slightly reduced margin to bring it up */
+}
   
   /* Textarea */
   .feedback-input {
     width: 100%;
-    height: 150px;
+    height: 200px;
     padding: 12px;
     font-size: 16px;
     color: #333;
@@ -45,27 +42,28 @@
   
   .feedback-input:focus {
     background: #fff;
-    border: 2px solid #ff7e5f;
+    border: 2px solid black;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   }
   
   /* Submit Button */
   .submit-btn {
+    background-color: rgba(255, 255, 255, 0.8);
     margin-top: 20px;
-    padding: 12px 25px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    background: linear-gradient(to right, #ff512f, #dd2476);
+    color: #2193b0;
+    padding: 15px;
+    font-style: italic;
+    font-size: 25px;
+    font-weight: 200;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: 0.3s ease-in-out;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   }
   
   .submit-btn:hover {
-    background: linear-gradient(to right, #dd2476, #ff512f);
+    background: white;
     transform: scale(1.05);
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
   }
