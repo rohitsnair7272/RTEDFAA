@@ -1,0 +1,95 @@
+.voice-feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  margin-top: 20px;
+  padding: 150px 150px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #783d78, #3c2643);
+  width: 700px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mic-button {
+  font-size: 30px;
+  cursor: pointer;
+  background: #ff3b3b;
+  padding: 20px;
+  border-radius: 50%;
+  color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease-in-out;
+}
+
+.mic-button:hover {
+  transform: scale(1.1);
+}
+
+.mic-button.recording {
+  background: #00c853;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.waveform {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 5px;
+}
+
+.waveform span {
+  display: inline-block;
+  width: 6px;
+  height: 20px;
+  background: #ff3b3b;
+  border-radius: 3px;
+  animation: waveAnimation 1s infinite ease-in-out;
+}
+
+.waveform span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.waveform span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.waveform span:nth-child(4) {
+  animation-delay: 0.6s;
+}
+.waveform span:nth-child(5) {
+  animation-delay: 0.8s;
+}
+
+@keyframes waveAnimation {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(1.8); }
+  100% { transform: scaleY(1); }
+}
+
+audio {
+  margin-top: 15px;
+  width: 100%;
+}
+
+.text-box {
+  width: 500px;
+  height: 100px;
+  margin-top: 100px;
+  padding: 40px 40px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  resize: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

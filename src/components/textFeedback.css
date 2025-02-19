@@ -39,37 +39,20 @@ body {
 .feedback-heading {
   font-size: 50px;
   font-weight: 700;
-  margin-bottom: 50px;
+  margin-bottom: 70px;
   align-self: center;
   
 }
 
-/* Dropdown Styling */
-.feedback-category {
-  width: 100%;
-  padding: 12px;
-  font-size: 18px;
-  border: 2px solid black;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.8);
-  outline: none;
-  transition: 0.3s ease-in-out;
-  margin-bottom: 90px;
-  color: #333;
- 
- 
-}
 
-.feedback-category:focus {
-  background: white;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
+
+
 
 /* Textarea */
 
 .feedback-input {
   width: calc(100% - 24px); /* Keeps padding in mind */
-  height: 300px;
+  height: 400px;
   padding: 12px;
   font-size: 16px;
   color: #333;
@@ -109,21 +92,10 @@ body {
   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-.feedback-category-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: flex-start; /* Aligns label and dropdown to the left */
-  gap: 5px;
-}
 
 
-.feedback-category-label {
-  font-size: 18px;
-  font-weight: bold;
-  color: #fff;
-  text-align: left;
-}
+
+
 
 .message {
   display: flex;
@@ -170,11 +142,7 @@ body {
     margin-bottom: 20px;
   }
 
-  .feedback-category {
-    font-size: 16px;
-    padding: 10px;
-  }
-
+ 
   .feedback-input {
     height: 150px;
     font-size: 14px;
@@ -209,10 +177,7 @@ body {
     font-size: 28px;
   }
 
-  .feedback-category {
-    font-size: 14px;
-    padding: 8px;
-  }
+
 
   .feedback-input {
     height: 120px;
