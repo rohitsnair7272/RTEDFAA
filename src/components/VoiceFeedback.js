@@ -33,17 +33,14 @@ const VoiceFeedback = () => {
           recognition.continuous = false;
 
           recognition.onresult = (event) => {
-            setText(event.results[0][0].transcript);
+            const speechText = event.results[0][0].transcript;
+            setText(speechText);
+            sendVoiceFeedbackToDB(speechText); // ✅ Send to MongoDB
           };
 
           recognition.onerror = (event) => {
             console.error("Speech recognition error:", event.error);
           };
-
-          const audioFile = new File([audioBlob], "recorded_audio.wav", { type: "audio/wav" });
-          const audioURL = URL.createObjectURL(audioFile);
-          const audioElement = new Audio(audioURL);
-          audioElement.play();
 
           recognition.start();
         };
@@ -60,9 +57,39 @@ const VoiceFeedback = () => {
     }
   };
 
+  // ✅ Send Voice Feedback to MongoDB
+  const sendVoiceFeedbackToDB = async (speechText) => {
+    if (!speechText.trim()) {
+      console.error("⚠️ No voice feedback detected.");
+      return;
+    }
+
+    try {
+      console.log("📢 Sending voice feedback to API...");
+
+      const response = await fetch("http://127.0.0.1:8080/submit_voice_feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ text: speechText }),
+      });
+
+      const data = await response.json();
+      console.log("📢 API Response:", data);
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit voice feedback");
+      }
+
+      console.log("✅ Voice feedback stored successfully!");
+    } catch (error) {
+      console.error("❌ Error submitting voice feedback:", error.message);
+    }
+  };
+
   return (
     <div className="voice-feedback">
-     
+      <h1 className="voice-heading">Voice Feedback</h1>
+
       <div className={`mic-button ${recording ? "recording" : ""}`} onClick={recording ? stopRecording : startRecording}>
         🎤
       </div>

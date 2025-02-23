@@ -4,25 +4,44 @@ import "./textFeedback.css";
 
 const TextFeedback = () => {
   const [feedback, setFeedback] = useState("");
+
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(""); 
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (feedback.trim() === "") {
       setError("⚠️ Please provide your feedback before submitting.");
       return;
     }
-
-    console.log("Customer Feedback:", feedback);
-    setSubmitted(true);
-    setError(""); 
-    setFeedback(""); 
-
-    // Navigate back after 2 seconds
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+  
+    try {
+      console.log("📢 Sending feedback to API...");
+  
+      const response = await fetch("http://127.0.0.1:8080/submit_text_feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ feedback }),
+      });
+  
+      console.log("📢 API Response:", response);
+  
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit feedback");
+      }
+  
+      setSubmitted(true);
+      setError(""); 
+      setFeedback(""); 
+  
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (error) {
+      console.error("❌ Error submitting feedback:", error.message);
+      setError(`❌ ${error.message}`);
+    }
   };
 
   return (

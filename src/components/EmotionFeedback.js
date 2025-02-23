@@ -60,7 +60,9 @@ const EmotionFeedback = () => {
           "http://127.0.0.1:5000/detect_emotion",
           formData
         );
-        setEmotion(response.data.emotion);
+        const detectedEmotion = response.data.emotion;
+        setEmotion(detectedEmotion);
+        sendEmotionFeedbackToDB(detectedEmotion); // ✅ Send to MongoDB
       } catch (error) {
         console.error("Error detecting emotion:", error);
         setEmotion("Error detecting emotion");
@@ -90,6 +92,37 @@ const EmotionFeedback = () => {
       happy: 5,
     };
     return ratings[emotion] || 0; // Default to 0 if emotion is not recognized
+  };
+
+  // ✅ Send Emotion Feedback to MongoDB
+  const sendEmotionFeedbackToDB = async (detectedEmotion) => {
+    if (!detectedEmotion) {
+      console.error("⚠️ No emotion detected.");
+      return;
+    }
+
+    const rating = getStarRating(detectedEmotion); // Get rating based on emotion
+
+    try {
+      console.log("📢 Sending emotion feedback to API...");
+
+      const response = await fetch("http://127.0.0.1:8080/submit_emotion_feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ emotion: detectedEmotion, rating: rating.toString() }),
+      });
+
+      const data = await response.json();
+      console.log("📢 API Response:", data);
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit emotion feedback");
+      }
+
+      console.log("✅ Emotion feedback stored successfully!");
+    } catch (error) {
+      console.error("❌ Error submitting emotion feedback:", error.message);
+    }
   };
 
   return (

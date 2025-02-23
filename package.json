@@ -15,7 +15,6 @@
     "face-api.js": "^0.22.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-mic": "^12.4.6",
     "react-router-dom": "^7.1.5",
     "react-scripts": "5.0.1",
     "react-webcam": "^7.2.0",
@@ -47,5 +46,10 @@
   },
   "devDependencies": {
     "babel-preset-react-app": "^10.0.1"
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
