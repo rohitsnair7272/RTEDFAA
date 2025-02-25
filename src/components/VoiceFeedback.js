@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 const VoiceFeedback = () => {
   const [recording, setRecording] = useState(false);
   const [text, setText] = useState("");
+  const [aiSuggestion, setAiSuggestion] = useState(""); // ✅ Store AI suggestion
   const [audioUrl, setAudioUrl] = useState(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -26,20 +27,23 @@ const VoiceFeedback = () => {
           const audioUrl = URL.createObjectURL(audioBlob);
           setAudioUrl(audioUrl);
 
-          // Convert speech to text (Using Web Speech API)
+          // ✅ Convert speech to text using Web Speech API
           const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
           recognition.lang = "en-US";
           recognition.interimResults = false;
           recognition.continuous = false;
 
-          recognition.onresult = (event) => {
-            const speechText = event.results[0][0].transcript;
-            setText(speechText);
-            sendVoiceFeedbackToDB(speechText); // ✅ Send to MongoDB
+          recognition.onresult = async (event) => {
+            const convertedText = event.results[0][0].transcript;
+            setText(convertedText);
+            console.log("✅ Converted Voice to Text:", convertedText);
+
+            // ✅ Send text to AI & Database
+            await handleSubmit(convertedText);
           };
 
           recognition.onerror = (event) => {
-            console.error("Speech recognition error:", event.error);
+            console.error("❌ Speech recognition error:", event.error);
           };
 
           recognition.start();
@@ -57,20 +61,20 @@ const VoiceFeedback = () => {
     }
   };
 
-  // ✅ Send Voice Feedback to MongoDB
-  const sendVoiceFeedbackToDB = async (speechText) => {
-    if (!speechText.trim()) {
-      console.error("⚠️ No voice feedback detected.");
+  const handleSubmit = async (voiceText) => {
+    if (!voiceText.trim()) {
+      console.error("⚠️ No valid text to submit.");
       return;
     }
 
     try {
       console.log("📢 Sending voice feedback to API...");
 
+      // ✅ Step 1: Send voice feedback (converted text) to FastAPI
       const response = await fetch("http://127.0.0.1:8080/submit_voice_feedback", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ text: speechText }),
+        body: new URLSearchParams({ text: voiceText }),
       });
 
       const data = await response.json();
@@ -80,7 +84,9 @@ const VoiceFeedback = () => {
         throw new Error(data.error || "Failed to submit voice feedback");
       }
 
-      console.log("✅ Voice feedback stored successfully!");
+      // ✅ Step 2: Display AI suggestion
+      setAiSuggestion(data.ai_suggestion);
+
     } catch (error) {
       console.error("❌ Error submitting voice feedback:", error.message);
     }
@@ -89,7 +95,7 @@ const VoiceFeedback = () => {
   return (
     <div className="voice-feedback">
       <h1 className="voice-heading">Voice Feedback</h1>
-
+      
       <div className={`mic-button ${recording ? "recording" : ""}`} onClick={recording ? stopRecording : startRecording}>
         🎤
       </div>
@@ -113,6 +119,8 @@ const VoiceFeedback = () => {
         onChange={(e) => setText(e.target.value)}
         placeholder="Your speech will appear here..."
       />
+
+     
     </div>
   );
 };

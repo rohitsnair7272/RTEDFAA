@@ -4,7 +4,7 @@ import "./textFeedback.css";
 
 const TextFeedback = () => {
   const [feedback, setFeedback] = useState("");
-
+  const [aiSuggestion, setAiSuggestion] = useState(""); // ✅ Store AI-generated suggestion
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(""); 
   const navigate = useNavigate();
@@ -17,24 +17,35 @@ const TextFeedback = () => {
   
     try {
       console.log("📢 Sending feedback to API...");
-  
+
+      // ✅ Step 1: Send feedback to store in database
       const response = await fetch("http://127.0.0.1:8080/submit_text_feedback", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({ feedback }),
       });
-  
+
       console.log("📢 API Response:", response);
-  
       const data = await response.json();
+
       if (!response.ok) {
         throw new Error(data.error || "Failed to submit feedback");
       }
-  
+
+      // ✅ Step 2: Get AI suggestion based on feedback
+      const aiResponse = await fetch("http://127.0.0.1:8080/get_ai_suggestion", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ feedback }),
+      });
+
+      const aiData = await aiResponse.json();
+      setAiSuggestion(aiData.suggestion); // ✅ Update AI suggestion state
+
       setSubmitted(true);
       setError(""); 
       setFeedback(""); 
-  
+
       setTimeout(() => {
         navigate("/");
       }, 2000);
@@ -70,6 +81,9 @@ const TextFeedback = () => {
         <button className="submit-btn" onClick={handleSubmit}>
           Submit
         </button>
+
+        
+       
       </div>
     </div>
   );
