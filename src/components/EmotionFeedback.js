@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; 
 import "./EmotionFeedback.css";
 
 const EmotionFeedback = () => {
@@ -9,6 +10,7 @@ const EmotionFeedback = () => {
   const [captured, setCaptured] = useState(false);
   const [isWebcamActive, setIsWebcamActive] = useState(false);
   const [countdown, setCountdown] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     navigator.mediaDevices
@@ -118,6 +120,10 @@ const EmotionFeedback = () => {
       if (!response.ok) {
         throw new Error(data.error || "Failed to submit emotion feedback");
       }
+
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
 
       console.log("✅ Emotion feedback stored successfully!");
     } catch (error) {

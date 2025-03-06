@@ -70,7 +70,7 @@ function App() {
         </Routes>
 
         
-        {/* <div className={`container ${showChatbot ? "show-chatbot" : ""}`}>
+         <div className={`container ${showChatbot ? "show-chatbot" : ""}`}>
           <button onClick={() => setShowChatbot((prev) => !prev)} id="chatbot-toggler">
             <span className="material-symbols-rounded">AI</span>
             <span className="material-symbols-rounded">close</span>
@@ -107,7 +107,7 @@ function App() {
               <ChatForm chatHistory={chatHistory} setChatHistory={setChatHistory} generateBotResponse={generateBotResponse} />
             </div>
           </div>
-        </div>*/}
+        </div>
       </div> 
     </Router>
   );
