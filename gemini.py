@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 # ✅ Load API key from .env file
 load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY = os.getenv("REACT_APP_GEMINI_API_KEY")
 
 def get_ai_suggestion(feedback_text):
     """
