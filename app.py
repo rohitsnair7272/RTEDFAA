@@ -3,20 +3,11 @@ from flask_cors import CORS
 from deepface import DeepFace
 import cv2
 import numpy as np
-from typing import Dict
 
-app = FastAPI()
+app = Flask(__name__)
+CORS(app)  # Allow cross-origin requests from frontend
 
-# Enable CORS for frontend requests
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Update with allowed frontend origins
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/")
+@app.route("/", methods=["GET"])
 def home():
     return "Flask Server Running!"
 
