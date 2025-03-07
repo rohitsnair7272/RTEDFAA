@@ -45,6 +45,7 @@ code {
 .chatbot-popup {
   position: fixed;
   width: 420px;
+  height: 450px;
   opacity: 0;
   right: 35px;
   bottom: 90px;

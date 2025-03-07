@@ -8,21 +8,32 @@ const EmotionFeedback = () => {
   const canvasRef = useRef(null);
   const [emotion, setEmotion] = useState(null);
   const [captured, setCaptured] = useState(false);
-  const [isWebcamActive, setIsWebcamActive] = useState(false);
   const [countdown, setCountdown] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    startWebcam();
+  }, []);
+
+  const startWebcam = () => {
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-          setIsWebcamActive(true);
         }
       })
       .catch((err) => console.error("Error accessing webcam:", err));
-  }, []);
+  };
+
+  const stopWebcam = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      let stream = videoRef.current.srcObject;
+      let tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+    }
+  };
 
   const startCaptureCountdown = () => {
     setCountdown(5);
@@ -49,6 +60,7 @@ const EmotionFeedback = () => {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     setCaptured(true);
     setCountdown(null);
+    stopWebcam(); // ✅ Stop webcam immediately after capturing
     sendToBackend(canvas);
   };
 
@@ -64,7 +76,7 @@ const EmotionFeedback = () => {
         );
         const detectedEmotion = response.data.emotion;
         setEmotion(detectedEmotion);
-        sendEmotionFeedbackToDB(detectedEmotion); // ✅ Send to MongoDB
+        sendEmotionFeedbackToDB(detectedEmotion); // ✅ Send feedback after detecting emotion
       } catch (error) {
         console.error("Error detecting emotion:", error);
         setEmotion("Error detecting emotion");
@@ -72,17 +84,6 @@ const EmotionFeedback = () => {
     }, "image/jpeg");
   };
 
-  const stopWebcam = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      let stream = videoRef.current.srcObject;
-      let tracks = stream.getTracks();
-      tracks.forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
-      setIsWebcamActive(false);
-    }
-  };
-
-  // ⭐ Function to get star rating based on emotion
   const getStarRating = (emotion) => {
     const ratings = {
       angry: 1,
@@ -96,14 +97,13 @@ const EmotionFeedback = () => {
     return ratings[emotion] || 0; // Default to 0 if emotion is not recognized
   };
 
-  // ✅ Send Emotion Feedback to MongoDB
   const sendEmotionFeedbackToDB = async (detectedEmotion) => {
     if (!detectedEmotion) {
       console.error("⚠️ No emotion detected.");
       return;
     }
 
-    const rating = getStarRating(detectedEmotion); // Get rating based on emotion
+    const rating = getStarRating(detectedEmotion);
 
     try {
       console.log("📢 Sending emotion feedback to API...");
@@ -121,11 +121,12 @@ const EmotionFeedback = () => {
         throw new Error(data.error || "Failed to submit emotion feedback");
       }
 
+      console.log("✅ Emotion feedback stored successfully!");
+
+      // ✅ Navigate to Feedback Selector after processing
       setTimeout(() => {
         navigate("/");
-      }, 2000);
-
-      console.log("✅ Emotion feedback stored successfully!");
+      }, 1000);
     } catch (error) {
       console.error("❌ Error submitting emotion feedback:", error.message);
     }
@@ -151,8 +152,6 @@ const EmotionFeedback = () => {
           </div>
         </>
       )}
-
-      {isWebcamActive && <button onClick={stopWebcam}>Stop Webcam</button>}
     </div>
   );
 };

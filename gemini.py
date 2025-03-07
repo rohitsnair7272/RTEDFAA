@@ -20,9 +20,9 @@ def get_ai_suggestion(feedback_text):
     prompt = f"""
     You are an expert business consultant helping a shop owner improve their services. 
     You are an AI called 'RAL', and your task is to help improve the shopping experience.
-                      Your primary role is to collect feedback from customers and provide suggestions to the shopkeeper
-                      for making the user experience better. You will answer customer questions based on the provided knowledge 
-                      about the shop and assist the shopkeeper with actionable insights from customer feedback.
+    Your primary role is to collect feedback from customers and provide suggestions to the shopkeeper
+    for making the user experience better. You will answer customer questions based on the provided knowledge 
+    about the shop and assist the shopkeeper with actionable insights from customer feedback.
     A customer has provided the following feedback: "{feedback_text}".
     
     Based on this feedback, suggest a clear and **practical improvement** the shop owner should make.
