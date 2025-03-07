@@ -59,7 +59,7 @@ const EmotionFeedback = () => {
 
       try {
         const response = await axios.post(
-          "http://127.0.0.1:8000/detect_emotion",
+          "http://127.0.0.1:5000/detect_emotion",
           formData
         );
         const detectedEmotion = response.data.emotion;
