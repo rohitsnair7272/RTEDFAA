@@ -1,31 +1,30 @@
+/* Voice Feedback Container */
 .voice-feedback {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   font-family: Arial, sans-serif;
-  margin-top: 20px;
-  padding: 150px 150px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background: linear-gradient(135deg, #783d78, #3c2643);
-  width: 700px;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 90%;
+  max-width: 1000px; /* Increased width for better layout */
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin: 100px auto; /* Centers it on screen */
+  margin-bottom: 70px;
+
 }
 
+/* Heading */
 .voice-heading {
- 
-    font-size: 50px;
-    font-weight: 700;
-    margin-bottom: 70px;
-    align-self: center;
-    color: white;
-    
-  
+  font-size: 40px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 30px;
 }
 
+/* Microphone Button */
 .mic-button {
   font-size: 30px;
   cursor: pointer;
@@ -52,6 +51,7 @@
   100% { transform: scale(1); }
 }
 
+/* Waveform Animation */
 .waveform {
   display: flex;
   justify-content: center;
@@ -68,18 +68,10 @@
   animation: waveAnimation 1s infinite ease-in-out;
 }
 
-.waveform span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.waveform span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-.waveform span:nth-child(4) {
-  animation-delay: 0.6s;
-}
-.waveform span:nth-child(5) {
-  animation-delay: 0.8s;
-}
+.waveform span:nth-child(2) { animation-delay: 0.2s; }
+.waveform span:nth-child(3) { animation-delay: 0.4s; }
+.waveform span:nth-child(4) { animation-delay: 0.6s; }
+.waveform span:nth-child(5) { animation-delay: 0.8s; }
 
 @keyframes waveAnimation {
   0% { transform: scaleY(1); }
@@ -87,20 +79,61 @@
   100% { transform: scaleY(1); }
 }
 
+/* Audio Player */
 audio {
   margin-top: 15px;
   width: 100%;
 }
 
+/* Text Box */
 .text-box {
-  width: 500px;
+  width: 100%;
+  max-width: 500px;
   height: 100px;
-  margin-top: 100px;
-  padding: 40px 40px;
+  margin-top: 40px;
+  padding: 20px;
   font-size: 16px;
   border: 2px solid #ddd;
   border-radius: 5px;
   outline: none;
   resize: none;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .voice-feedback {
+    width: 95%;
+    padding: 40px;
+  }
+
+  .voice-heading {
+    font-size: 35px;
+  }
+
+  .mic-button {
+    font-size: 24px;
+    padding: 15px;
+  }
+
+  .text-box {
+    max-width: 90%;
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .voice-heading {
+    font-size: 30px;
+  }
+
+  .mic-button {
+    font-size: 22px;
+    padding: 12px;
+  }
+
+  .text-box {
+    height: 70px;
+    padding: 15px;
+  }
 }

@@ -6,7 +6,7 @@ const TextFeedback = () => {
   const [feedback, setFeedback] = useState("");
   const [aiSuggestion, setAiSuggestion] = useState(""); // ✅ Store AI-generated suggestion
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState(""); 
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
@@ -14,7 +14,7 @@ const TextFeedback = () => {
       setError("⚠️ Please provide your feedback before submitting.");
       return;
     }
-  
+
     try {
       console.log("📢 Sending feedback to API...");
 
@@ -43,12 +43,13 @@ const TextFeedback = () => {
       setAiSuggestion(aiData.suggestion); // ✅ Update AI suggestion state
 
       setSubmitted(true);
-      setError(""); 
-      setFeedback(""); 
+      setError("");
+      setFeedback("");
 
+      // ✅ Navigate to feedback selector after 3 seconds
       setTimeout(() => {
         navigate("/");
-      }, 2000);
+      }, 3000);
     } catch (error) {
       console.error("❌ Error submitting feedback:", error.message);
       setError(`❌ ${error.message}`);
@@ -62,28 +63,25 @@ const TextFeedback = () => {
         <div className="text-container">
           {!submitted ? (
             <>
-              {error && <p className="error-message">{error}</p>} 
+              {error && <p className="error-message">{error}</p>}
               <label className="message">Message</label>
-              <textarea 
-                className="feedback-input" 
+              <textarea
+                className="feedback-input"
                 value={feedback}
                 onChange={(e) => {
                   setFeedback(e.target.value);
-                  setError(""); 
+                  setError("");
                 }}
                 placeholder="Type your feedback here..."
               />
+              <button className="submit-btn" onClick={handleSubmit}>
+                Submit
+              </button>
             </>
           ) : (
             <p className="success-message">✅ Thank you for your feedback!</p>
           )}
         </div>
-        <button className="submit-btn" onClick={handleSubmit}>
-          Submit
-        </button>
-
-        
-       
       </div>
     </div>
   );

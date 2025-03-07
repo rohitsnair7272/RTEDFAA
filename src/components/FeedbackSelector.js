@@ -14,7 +14,7 @@ const FeedbackInterface = () => {
   return (
     <div className="feedback-container">
       <h2 className="centered-text">Build better products with<br />Customer Feedback!</h2>
-      <p className="slogan">Share Your Thoughts, Feelings, and Voice — Together We Improve!</p>
+      <p className="slogan">Share Your Thoughts, Feelings, and Voice<br /> Together We Improve!</p>
       <div className="feedback-type-container">
         <button className="feedback-button" onClick={() => navigate("/emotion")}>
           Emotion Feedback

@@ -13,11 +13,11 @@ body {
 
 /* Feedback Container Styling */
 .feedback-container {
-  background-color: rgba(209, 214, 223, 0.8); /* Light transparent background */
+  background-color: rgba(219, 200, 218, 0.8); /* Light transparent background */
   border-radius: 20px;
-  padding: 100px;
+  padding: 10px;
   box-shadow: 10px 10px 10px rgba(9, 7, 21, 0.2);
-  width: 80%;
+  width: 100%;
   max-width: 600px;
   opacity: 0;
   animation: fadeInContainer 1.5s ease-in-out forwards; /* Fade in the container */
@@ -25,10 +25,10 @@ body {
 
 /* Centered Title */
 .centered-text {
-  font-size: 45px;
+  font-size: 32px;
   font-weight: bold;
   color: #080808;
-  margin-top: 40px;
+  margin-bottom: 15px;
   line-height: 1.4;
   opacity: 0;
   animation: slideInFromTop 1s ease-out 0.5s forwards; /* Slide-in animation for title */
@@ -36,9 +36,9 @@ body {
 
 /* Slogan Styling */
 .slogan {
-  font-size: 18px;
-  color: #615e5e;
-  margin-bottom: 5px;
+  font-size: 25px;
+  color: #464545;
+  margin-top: 70px;
   font-style: italic;
   opacity: 0;
   animation: slideInFromLeft 1s ease-out 1s forwards; /* Slide-in animation for slogan */
@@ -51,16 +51,19 @@ body {
   padding: 30px 0; /* Increase padding */
   margin-top: 70px; /* Add margin for spacing */
   gap: 30px;
+  width: 100%;
+  margin-top: 90px;
 }
 
 /* Button Styling */
 .feedback-button {
   background-color: rgba(255, 255, 255, 0.8);
-  color: #2193b0;
+  color: #583067;
   border: none;
-  padding: 30px 30px;
-  font-size: 25px;
-  font-weight: 200;
+  margin-bottom: -3px;
+  padding: 20px 20px;
+  font-size: 20px;
+  font-weight: bold;
   font-style: italic;
   border-radius: 10px;
   cursor: pointer;
