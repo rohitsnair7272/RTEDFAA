@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";  // ✅ Import useNavigate for redirection
 import "./EmotionFeedback.css";
 
 const EmotionFeedback = () => {
@@ -8,32 +8,21 @@ const EmotionFeedback = () => {
   const canvasRef = useRef(null);
   const [emotion, setEmotion] = useState(null);
   const [captured, setCaptured] = useState(false);
+  const setIsWebcamActive = useState(false);
   const [countdown, setCountdown] = useState(null);
-  const navigate = useNavigate();
+  const navigate = useNavigate();  // ✅ Navigation hook
 
   useEffect(() => {
-    startWebcam();
-  }, []);
-
-  const startWebcam = () => {
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+          setIsWebcamActive(true);
         }
       })
       .catch((err) => console.error("Error accessing webcam:", err));
-  };
-
-  const stopWebcam = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      let stream = videoRef.current.srcObject;
-      let tracks = stream.getTracks();
-      tracks.forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
-    }
-  };
+  }, []);
 
   const startCaptureCountdown = () => {
     setCountdown(5);
@@ -60,7 +49,6 @@ const EmotionFeedback = () => {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     setCaptured(true);
     setCountdown(null);
-    stopWebcam(); // ✅ Stop webcam immediately after capturing
     sendToBackend(canvas);
   };
 
@@ -71,24 +59,33 @@ const EmotionFeedback = () => {
 
       try {
         const response = await axios.post(
-          "http://127.0.0.1:8000/detect_emotion",
+          "http://127.0.0.1:5000/detect_emotion",
           formData
         );
         const detectedEmotion = response.data.emotion;
         setEmotion(detectedEmotion);
-        sendEmotionFeedbackToDB(detectedEmotion); // ✅ Send feedback after detecting emotion
+        sendEmotionFeedbackToDB(detectedEmotion); // ✅ Send to MongoDB
       } catch (error) {
         console.error("Error detecting emotion:", error);
         setEmotion("Error detecting emotion");
       }
     }, "image/jpeg");
   };
+  
+    {/*const stopWebcam = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      let stream = videoRef.current.srcObject;
+      let tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+      setIsWebcamActive(false);
+    }
+  };*/}
 
+  // ⭐ Function to get star rating based on emotion
   const getStarRating = (emotion) => {
     const ratings = {
       angry: 1,
-      disgust: 1,
-      fear: 2,
       sad: 2,
       neutral: 3,
       surprise: 4,
@@ -97,13 +94,14 @@ const EmotionFeedback = () => {
     return ratings[emotion] || 0; // Default to 0 if emotion is not recognized
   };
 
+  // ✅ Send Emotion Feedback to MongoDB
   const sendEmotionFeedbackToDB = async (detectedEmotion) => {
     if (!detectedEmotion) {
       console.error("⚠️ No emotion detected.");
       return;
     }
 
-    const rating = getStarRating(detectedEmotion);
+    const rating = getStarRating(detectedEmotion); // Get rating based on emotion
 
     try {
       console.log("📢 Sending emotion feedback to API...");
@@ -123,10 +121,11 @@ const EmotionFeedback = () => {
 
       console.log("✅ Emotion feedback stored successfully!");
 
-      // ✅ Navigate to Feedback Selector after processing
+      // ✅ Navigate to Feedback Selector after 3 seconds
       setTimeout(() => {
         navigate("/");
-      }, 1000);
+      }, 2000);
+
     } catch (error) {
       console.error("❌ Error submitting emotion feedback:", error.message);
     }
@@ -150,6 +149,7 @@ const EmotionFeedback = () => {
               <span key={i} className="star">⭐</span>
             ))}
           </div>
+        
         </>
       )}
     </div>

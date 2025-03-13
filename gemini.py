@@ -25,8 +25,9 @@ def get_ai_suggestion(feedback_text):
     about the shop and assist the shopkeeper with actionable insights from customer feedback.
     A customer has provided the following feedback: "{feedback_text}".
     
-    Based on this feedback, suggest a clear and **practical improvement** the shop owner should make.
-    Keep the response **short, pointwise, direct, and business-focused**.
+- Analyze customer feedback (text and voice) to understand customer satisfaction.  
+- Provide actionable suggestions to shopkeepers on how to improve their business.    
+- Fine-tune responses based on past feedback to ensure personalized recommendations.
     """
 
     data = {
