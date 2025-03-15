@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate for na
 const VoiceFeedback = () => {
   const [recording, setRecording] = useState(false);
   const [text, setText] = useState("");
+  const [originalSpeech, setOriginalSpeech] = useState(""); // ✅ Store original spoken words
+  const [accuracy, setAccuracy] = useState(null); // ✅ Store accuracy percentage
   const [aiSuggestion, setAiSuggestion] = useState(""); 
   const [audioUrl, setAudioUrl] = useState(null);
   const [submitted, setSubmitted] = useState(false); // ✅ State to track submission
@@ -14,6 +16,21 @@ const VoiceFeedback = () => {
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recognitionRef = useRef(null); // Store speech recognition instance
+
+  // Function to calculate accuracy using Levenshtein Distance
+  const calculateAccuracy = (original, recognized) => {
+    const originalWords = original.trim().split(/\s+/);
+    const recognizedWords = recognized.trim().split(/\s+/);
+
+    let matches = 0;
+    originalWords.forEach((word, i) => {
+      if (recognizedWords[i] && recognizedWords[i].toLowerCase() === word.toLowerCase()) {
+        matches++;
+      }
+    });
+
+    return originalWords.length > 0 ? ((matches / originalWords.length) * 100).toFixed(2) : 0;
+  };
 
   // Function to start speech recognition
   const startSpeechRecognition = () => {
@@ -47,6 +64,7 @@ const VoiceFeedback = () => {
   const startRecording = () => {
     setRecording(true);
     setText(""); // Clear previous text
+    setOriginalSpeech(""); // Clear previous original speech
     startSpeechRecognition(); // Start real-time voice-to-text
 
     navigator.mediaDevices.getUserMedia({ audio: true })
@@ -72,6 +90,7 @@ const VoiceFeedback = () => {
   // Stop recording & speech recognition
   const stopRecording = () => {
     setRecording(false);
+    setOriginalSpeech(text); // Save the original spoken words
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
     }
@@ -99,6 +118,10 @@ const VoiceFeedback = () => {
       if (!response.ok) throw new Error(data.error || "Failed to submit feedback");
       setAiSuggestion(data.ai_suggestion);
 
+      // ✅ Calculate Accuracy
+      const calculatedAccuracy = calculateAccuracy(originalSpeech, text);
+      setAccuracy(calculatedAccuracy);
+      
       // ✅ Show Thank You Message
       setSubmitted(true);
       
@@ -144,7 +167,10 @@ const VoiceFeedback = () => {
         <button onClick={handleSubmit}>Submit Feedback</button> 
         
       ) : (
-        <p className="success-message">✅ Thank you for your response!</p>
+        <>
+          <p className="success-message">✅ Thank you for your response!</p>
+          <p className="accuracy-message">🎯 Speech Recognition Accuracy: <strong>{accuracy}%</strong></p>
+        </>
       )}
     </div>
   );

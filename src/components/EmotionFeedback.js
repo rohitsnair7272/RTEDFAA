@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";  // ✅ Import useNavigate for redirection
+import { useNavigate } from "react-router-dom";
 import "./EmotionFeedback.css";
 
 const EmotionFeedback = () => {
@@ -8,25 +8,29 @@ const EmotionFeedback = () => {
   const canvasRef = useRef(null);
   const [emotion, setEmotion] = useState(null);
   const [captured, setCaptured] = useState(false);
-  const setIsWebcamActive = useState(false);
+  const [capturedImage, setCapturedImage] = useState(null); // ✅ Store captured image
   const [countdown, setCountdown] = useState(null);
-  const navigate = useNavigate();  // ✅ Navigation hook
+  const navigate = useNavigate();
 
   useEffect(() => {
+    startWebcam();
+  }, []);
+
+  // ✅ Function to start the webcam
+  const startWebcam = () => {
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-          setIsWebcamActive(true);
         }
       })
       .catch((err) => console.error("Error accessing webcam:", err));
-  }, []);
+  };
 
   const startCaptureCountdown = () => {
-    setCountdown(5);
-    let timeLeft = 5;
+    setCountdown(3); // ⏳ Countdown from 3
+    let timeLeft = 3;
 
     const interval = setInterval(() => {
       timeLeft -= 1;
@@ -39,19 +43,33 @@ const EmotionFeedback = () => {
     }, 1000);
   };
 
+  // ✅ Capture Image and Display It (Freeze Effect)
   const captureImage = () => {
     if (!videoRef.current) return;
     const canvas = canvasRef.current;
     const video = videoRef.current;
     const ctx = canvas.getContext("2d");
+
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const imageURL = canvas.toDataURL("image/jpeg"); // ✅ Convert image to URL
+    setCapturedImage(imageURL); // ✅ Store captured image
     setCaptured(true);
     setCountdown(null);
+
+    // ✅ Stop Webcam (Freeze Effect)
+    if (videoRef.current.srcObject) {
+      let tracks = videoRef.current.srcObject.getTracks();
+      tracks.forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+    }
+
     sendToBackend(canvas);
   };
 
+  // ✅ Send Image to Backend for Emotion Detection
   const sendToBackend = async (canvas) => {
     canvas.toBlob(async (blob) => {
       const formData = new FormData();
@@ -64,25 +82,15 @@ const EmotionFeedback = () => {
         );
         const detectedEmotion = response.data.emotion;
         setEmotion(detectedEmotion);
-        sendEmotionFeedbackToDB(detectedEmotion); // ✅ Send to MongoDB
+        sendEmotionFeedbackToDB(detectedEmotion);
       } catch (error) {
         console.error("Error detecting emotion:", error);
         setEmotion("Error detecting emotion");
       }
     }, "image/jpeg");
   };
-  
-    {/*const stopWebcam = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      let stream = videoRef.current.srcObject;
-      let tracks = stream.getTracks();
-      tracks.forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
-      setIsWebcamActive(false);
-    }
-  };*/}
 
-  // ⭐ Function to get star rating based on emotion
+  // ⭐ Get Star Rating Based on Emotion
   const getStarRating = (emotion) => {
     const ratings = {
       angry: 1,
@@ -91,7 +99,7 @@ const EmotionFeedback = () => {
       surprise: 4,
       happy: 5,
     };
-    return ratings[emotion] || 0; // Default to 0 if emotion is not recognized
+    return ratings[emotion] || 0;
   };
 
   // ✅ Send Emotion Feedback to MongoDB
@@ -101,7 +109,7 @@ const EmotionFeedback = () => {
       return;
     }
 
-    const rating = getStarRating(detectedEmotion); // Get rating based on emotion
+    const rating = getStarRating(detectedEmotion);
 
     try {
       console.log("📢 Sending emotion feedback to API...");
@@ -125,7 +133,6 @@ const EmotionFeedback = () => {
       setTimeout(() => {
         navigate("/");
       }, 2000);
-
     } catch (error) {
       console.error("❌ Error submitting emotion feedback:", error.message);
     }
@@ -134,9 +141,17 @@ const EmotionFeedback = () => {
   return (
     <div className="emotion-container">
       <h2>Emotion Feedback</h2>
-      <video ref={videoRef} autoPlay></video>
+
+      {/* ✅ Display Captured Image or Video */}
+      {capturedImage ? (
+        <img src={capturedImage} alt="Captured" className="captured-image" />
+      ) : (
+        <video ref={videoRef} autoPlay></video>
+      )}
+
       <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
 
+      {/* ✅ Countdown Timer */}
       {countdown !== null ? (
         <h3 className="countdown">{countdown}</h3>
       ) : !captured ? (
@@ -149,7 +164,7 @@ const EmotionFeedback = () => {
               <span key={i} className="star">⭐</span>
             ))}
           </div>
-        
+          
         </>
       )}
     </div>

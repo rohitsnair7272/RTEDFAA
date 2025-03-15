@@ -3,8 +3,8 @@ body {
   margin: 0;
   padding: 20px;
   border: 35px solid;
-  border-image: linear-gradient(135deg, #e305e3, #300141) 1;
-  background: linear-gradient(135deg, #fc6be9, #6b24b6, #5e1c78);
+  border-image: linear-gradient(135deg, #0e3b60, #1b626b) 1;
+  background: linear-gradient(135deg, #20649b, #28a7b8);
   min-height: 100vh;
   display: flex;
   justify-content: center;

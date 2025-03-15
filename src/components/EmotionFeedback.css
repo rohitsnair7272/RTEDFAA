@@ -2,7 +2,7 @@
 body, html {
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, #fc6be9, #6b24b6, #5e1c78);
+  background: linear-gradient(135deg, #20649b, #28a7b8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,7 +41,7 @@ h2 {
 video {
   border: 4px solid white;
   border-radius: 15px;
-  width: 100%;
+  width: 90%;
   max-width: 500px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   margin-top: 15px;

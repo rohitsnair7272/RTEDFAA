@@ -1,7 +1,7 @@
 .navbar {
     width: 100%;
     height: 40px;
-    background: linear-gradient(90deg, #dc5ab5, #4b0f63,#3d0254 );
+    background: linear-gradient(90deg, #0e3b60, #1b626b );
     display: flex;
     justify-content: space-between; /* Optional: If you want space between items */
     align-items: center; /* Centers the items vertically */

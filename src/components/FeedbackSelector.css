@@ -23,6 +23,9 @@ body {
   animation: fadeInContainer 1.5s ease-in-out forwards; /* Fade in the container */
 }
 
+
+
+
 /* Centered Title */
 .centered-text {
   font-size: 32px;
@@ -58,7 +61,7 @@ body {
 /* Button Styling */
 .feedback-button {
   background-color: rgba(255, 255, 255, 0.8);
-  color: #583067;
+  color: #28587f;
   border: none;
   margin-bottom: -3px;
   padding: 20px 20px;

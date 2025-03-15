@@ -17,13 +17,13 @@ const FeedbackInterface = () => {
       <p className="slogan">Share Your Thoughts, Feelings, and Voice<br /> Together We Improve!</p>
       <div className="feedback-type-container">
         <button className="feedback-button" onClick={() => navigate("/emotion")}>
-          Emotion Feedback
+        😊 Emotion Feedback
           </button>
         <button className="feedback-button" onClick={() => navigate("/text")}>
-          Text Feedback
+        📝 Text Feedback
           </button>
         <button className="feedback-button" onClick={() => navigate("/voice")}>
-          Voice Feedback
+        🎤 Voice Feedback
           </button>
       </div>
     </div>
