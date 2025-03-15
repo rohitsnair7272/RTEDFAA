@@ -111,12 +111,12 @@ code {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: 460px;
+  height: 220px;
   overflow-y: auto;
   margin-bottom: 82px;
   padding: 25px 22px;
   scrollbar-width: thin;
-  scrollbar-color: #DDD3F9 transparent;
+  scrollbar-color: #DDD4F9;
 }
 .chat-body .message {
   display: flex;
